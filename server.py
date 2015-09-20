@@ -81,10 +81,10 @@ def render_song(sid):
     song = SONG_DATA[sid]
     song_name = song['name']
     song_artist = song['artist']
-    if len(song['name']) > 15:
-        song_name = song_name[0:9] + "..."
-    if len(song['artist']) > 15:
-        song_artist = song_artist[0:9] + "..."
+    if len(song['name']) > 25:
+        song_name = song_name[0:22] + "..."
+    if len(song['artist']) > 25:
+        song_artist = song_artist[0:22] + "..."
     return render_template('song.html', name=song_name, image=song['image'], spotify=song['spotify'],
                            youtube=song['youtube'], apple=song['apple'], artist=song_artist,
                            soundcloud=song['soundcloud'])

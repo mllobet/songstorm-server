@@ -31,7 +31,7 @@ def get_link():
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id
-    return jsonify({'link': url})
+    return jsonify({'link': url, 'youtube': song['youtube'], 'apple': song['apple'], 'spotify': song['spotify']})
 
 
 @app.route('/api/linkk', methods=['GET'])
@@ -70,8 +70,14 @@ def post_listening():
 @app.route('/song/<sid>', methods=['GET'])
 def render_song(sid):
     song = SONG_DATA[sid]
-    return render_template('song.html', name=song['name'], image=song['image'], spotify=song['spotify'],
-                           youtube=song['youtube'], apple=song['apple'], artist=song['artist'])
+    song_name = song['name']
+    song_artist = song['artist']
+    if len(song['name']) > 10:
+        song_name = song_name[0:9] + "..."
+    if len(song['artist']) > 10:
+        song_artist = song_artist[0:9] + "..."
+    return render_template('song.html', name=song_name, image=song['image'], spotify=song['spotify'],
+                           youtube=song['youtube'], apple=song['apple'], artist=song_artist)
 
 
 def get_spotify(link):

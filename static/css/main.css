@@ -7291,7 +7291,7 @@ body > div {
 body > div img {
   box-sizing: content-box;
   padding: 2vh 0;
-  height: 12.25vh;
+  height: 9vh;
 }
 body > div .head {
   font-size: 3vh;
@@ -7302,4 +7302,8 @@ body > div .head {
 body > div .head span {
   font-size: 2.8vh;
   font-weight: 300;
+}
+body > div .head.topkek {
+  line-height: 80vh;
+  height: 80vh;
 }

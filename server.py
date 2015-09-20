@@ -3,6 +3,7 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask import render_template
 
 import requests
 
@@ -31,7 +32,7 @@ def post_listening():
 
 @app.route('/song', methods=['GET'])
 def render_song():
-    return 'OK'
+    return render_template('song.html')
 
 
 def get_spotify(link):

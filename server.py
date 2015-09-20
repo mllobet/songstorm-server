@@ -22,7 +22,7 @@ def get_link():
     song = get_spotify(title)
     SONG_DATA[song_id] = song
 
-    return jsonify(SONG_DATA[song_id])
+    return "http://127.0.0.1:5000/song/" + song_id
 
 
 @app.route('/api/near', methods=['GET'])
@@ -40,9 +40,10 @@ def post_listening():
     return 'OK'
 
 
-@app.route('/song', methods=['GET'])
-def render_song():
-    return render_template('song.html')
+@app.route('/song/<sid>', methods=['GET'])
+def render_song(sid):
+    song = SONG_DATA[sid]
+    return render_template('song.html', name=song['name'], image=song['image'], spotify=['spotify'])
 
 
 def get_spotify(link):

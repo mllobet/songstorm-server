@@ -45,7 +45,7 @@ def post_listening():
 @app.route('/song/<sid>', methods=['GET'])
 def render_song(sid):
     song = SONG_DATA[sid]
-    return render_template('song.html', name=song['name'], image=song['image'], spotify=['spotify'])
+    return render_template('song.html', name=song['name'], image=song['image'], spotify=song['spotify'])
 
 
 def get_spotify(link):

@@ -28,6 +28,7 @@ def get_link():
     song['artist'] = artist
     song['youtube'] = get_youtube(search_term)
     song['apple'] = get_apple(search_term)
+    song['soundcloud'] = get_soundcloud(search_term)
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id
@@ -46,10 +47,16 @@ def get_linkk():
     song['artist'] = artist
     song['youtube'] = get_youtube(search_term)
     song['apple'] = get_apple(search_term)
+    song['soundcloud'] = get_soundcloud(search_term)
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id
     return url
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+        return render_template('404.html'), 404
 
 
 @app.route('/api/near', methods=['GET'])
@@ -72,12 +79,13 @@ def render_song(sid):
     song = SONG_DATA[sid]
     song_name = song['name']
     song_artist = song['artist']
-    if len(song['name']) > 10:
+    if len(song['name']) > 15:
         song_name = song_name[0:9] + "..."
-    if len(song['artist']) > 10:
+    if len(song['artist']) > 15:
         song_artist = song_artist[0:9] + "..."
     return render_template('song.html', name=song_name, image=song['image'], spotify=song['spotify'],
-                           youtube=song['youtube'], apple=song['apple'], artist=song_artist)
+                           youtube=song['youtube'], apple=song['apple'], artist=song_artist,
+                           soundcloud=song['soundcloud'])
 
 
 def get_spotify(link):
@@ -100,7 +108,18 @@ def get_youtube(link):
 def get_apple(link):
     url = 'https://itunes.apple.com/search?country=us&limit=1&term=' + link.replace(' ', '+')
     res = json.loads(requests.get(url).text)
+    if len(res['results']) < 1:
+        return ""
     return res['results'][0]['trackViewUrl']
+
+
+def get_soundcloud(link):
+    url = 'http://api.soundcloud.com/tracks?client_id=12e835d0b472be346823494a1ed7f3fe&q=' + link.replace(' ', '+')
+    res = json.loads(requests.get(url).text)
+
+    if len(res) < 1:
+        return ""
+    return res[0]['permalink_url']
 
 if __name__ == "__main__":
 

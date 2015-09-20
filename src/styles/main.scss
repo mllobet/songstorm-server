@@ -2,4 +2,38 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:500,900italic,900,400italic,100,700italic,300,700,500italic,100italic,300italic,400);
 //Montserrat google font
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+@import "bootstrap";
 
+body {
+  background-image: url('http://cdn2.pitchfork.com/news/43945/3b8625a1.jpg');
+  background-size: 200%;
+  background-position: 50% 0;
+  >div {
+    width: 80vw;
+    height: 80vh;
+    margin-left: 10vw;
+    margin-top: 10vh;
+    border: solid 1px #CCC;
+    background-color: #EEE; 
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    display: block;
+    $kek : 3;
+    img {
+      box-sizing: content-box;
+      padding: 2vh 0;
+      height: (65/$kek - 4)+vh;
+    }
+    .head {
+      span {
+        font-size: 2.8vh;
+        font-weight: 300;
+      }
+      font-size: 3vh;
+      font-weight: 600;
+      line-height: 10vh;
+      height: 10vh;
+    }
+  }
+}

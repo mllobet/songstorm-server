@@ -19,7 +19,11 @@ body {
     text-align: center;
     position: relative;
     display: block;
-    $kek : 5;
+    $kek : 3;
+    a {
+      display:inline-block;
+      width: 40%;
+    }
     img {
       box-sizing: content-box;
       padding: 2vh 0;

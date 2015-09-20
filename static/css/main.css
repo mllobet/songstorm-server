@@ -7288,10 +7288,14 @@ body > div {
   position: relative;
   display: block;
 }
+body > div a {
+  display: inline-block;
+  width: 40%;
+}
 body > div img {
   box-sizing: content-box;
   padding: 2vh 0;
-  height: 9vh;
+  height: 17.66667vh;
 }
 body > div .head {
   font-size: 3vh;

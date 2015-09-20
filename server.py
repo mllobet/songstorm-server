@@ -23,6 +23,7 @@ def get_link():
     song_id = str(uuid.uuid1())[0: 8]
     song = get_spotify(title)
     song['youtube'] = get_youtube(title)
+    song['apple'] = get_apple(title)
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id

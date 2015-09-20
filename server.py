@@ -6,13 +6,23 @@ from flask import jsonify
 from flask import render_template
 
 import requests
+import json
+import uuid
 
 app = Flask(__name__)
+
+SONG_DATA = {}
 
 
 @app.route('/api/link', methods=['GET'])
 def get_link():
-    return 'OK'
+    title = request.args['title']
+
+    song_id = str(uuid.uuid1())[0: 8]
+    song = get_spotify(title)
+    SONG_DATA[song_id] = song
+
+    return jsonify(SONG_DATA[song_id])
 
 
 @app.route('/api/near', methods=['GET'])
@@ -37,12 +47,12 @@ def render_song():
 
 def get_spotify(link):
     url = 'https://api.spotify.com/v1/search?q=' + link.replace(' ', '%20') + '&type=track'
-    res = requests.get(url)
+    res = json.loads(requests.get(url).text)
     items = res['tracks']['items']
     if len(items) < 1:
-        return {'link': ''}
-    track = items['album']['external_urls']['spotify']
-    return {'link': track}
+        return {'link': '', 'name': '', 'image': ''}
+    track = items[0]['album']['external_urls']['spotify']
+    return {'spotify': track, 'name': link, 'image': items[0]['album']['images'][0]['url']}
 
 
 if __name__ == "__main__":

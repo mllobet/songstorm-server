@@ -19,11 +19,15 @@ ngrok_url = 'http://68d39f36.ngrok.com'
 @app.route('/api/link', methods=['GET'])
 def get_link():
     title = request.args['title']
+    artist = request.args['artist']
+
+    search_term = title + ' ' + artist
 
     song_id = str(uuid.uuid1())[0: 8]
-    song = get_spotify(title)
-    song['youtube'] = get_youtube(title)
-    song['apple'] = get_apple(title)
+    song = get_spotify(search_term)
+    song['artist'] = artist
+    song['youtube'] = get_youtube(search_term)
+    song['apple'] = get_apple(search_term)
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id
@@ -33,14 +37,18 @@ def get_link():
 @app.route('/api/linkk', methods=['GET'])
 def get_linkk():
     title = request.args['title']
+    artist = request.args['artist']
+
+    search_term = title + ' ' + artist
 
     song_id = str(uuid.uuid1())[0: 8]
-    song = get_spotify(title)
-    song['youtube'] = get_youtube(title)
-    song['apple'] = get_apple(title)
+    song = get_spotify(search_term)
+    song['artist'] = artist
+    song['youtube'] = get_youtube(search_term)
+    song['apple'] = get_apple(search_term)
     SONG_DATA[song_id] = song
 
-    url = ngrok_url + '/song/' + song_id 
+    url = ngrok_url + '/song/' + song_id
     return url
 
 
@@ -63,7 +71,7 @@ def post_listening():
 def render_song(sid):
     song = SONG_DATA[sid]
     return render_template('song.html', name=song['name'], image=song['image'], spotify=song['spotify'],
-                           youtube=song['youtube'], apple=song['apple'])
+                           youtube=song['youtube'], apple=song['apple'], artist=song['artist'])
 
 
 def get_spotify(link):
@@ -78,6 +86,8 @@ def get_spotify(link):
 def get_youtube(link):
     url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + link.replace(' ', '+') + '+music&type=video&videoCaption=closedCaption&key=AIzaSyAn0Ctw-bCSefAjQFhyNI6HzMdWEuZXImI'
     res = json.loads(requests.get(url).text)
+    if len(res['items']) < 1:
+        return ""
     vid_id = res['items'][0]['id']['videoId']
     return "http://youtube.com/watch?v=" + vid_id
 

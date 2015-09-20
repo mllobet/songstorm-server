@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 SONG_DATA = {}
 
+ngrok_url = 'http://68d39f36.ngrok.com'
 
 @app.route('/api/link', methods=['GET'])
 def get_link():
@@ -22,7 +23,8 @@ def get_link():
     song = get_spotify(title)
     SONG_DATA[song_id] = song
 
-    return "http://127.0.0.1:5000/song/" + song_id
+    url = ngrok_url + '/song/' + song_id 
+    return jsonify({'link': url}) 
 
 
 @app.route('/api/near', methods=['GET'])

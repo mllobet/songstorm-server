@@ -25,6 +25,7 @@ def get_link():
 
     song_id = str(uuid.uuid1())[0: 8]
     song = get_spotify(search_term)
+    song['name'] = title
     song['artist'] = artist
     song['youtube'] = get_youtube(search_term)
     song['apple'] = get_apple(search_term)
@@ -32,7 +33,7 @@ def get_link():
     SONG_DATA[song_id] = song
 
     url = ngrok_url + '/song/' + song_id
-    return jsonify({'link': url, 'youtube': song['youtube'], 'apple': song['apple'], 'spotify': song['spotify']})
+    return jsonify({'link': url, 'youtube': song['youtube'], 'apple': song['apple'], 'spotify': song['spotify'], 'image': song['image']})
 
 
 @app.route('/api/linkk', methods=['GET'])
@@ -44,6 +45,7 @@ def get_linkk():
 
     song_id = str(uuid.uuid1())[0: 8]
     song = get_spotify(search_term)
+    song['name'] = title
     song['artist'] = artist
     song['youtube'] = get_youtube(search_term)
     song['apple'] = get_apple(search_term)
@@ -95,7 +97,7 @@ def get_spotify(link):
     if len(items) < 1:
         return {'link': '', 'name': '', 'image': ''}
     track = items[0]['album']['external_urls']['spotify']
-    return {'spotify': track, 'name': link, 'image': items[0]['album']['images'][0]['url']}
+    return {'spotify': track, 'image': items[0]['album']['images'][0]['url']}
 
 def get_youtube(link):
     url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + link.replace(' ', '+') + '+music&type=video&videoCaption=closedCaption&key=AIzaSyAn0Ctw-bCSefAjQFhyNI6HzMdWEuZXImI'

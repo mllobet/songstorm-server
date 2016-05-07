@@ -5,6 +5,7 @@ from flask import request
 from flask import jsonify
 from flask import render_template
 
+import argparse
 import requests
 import json
 import uuid
@@ -13,7 +14,7 @@ app = Flask(__name__)
 
 SONG_DATA = {}
 
-ngrok_url = 'http://68d39f36.ngrok.com'
+URL = 'http://67722f.ngrok.com'
 
 
 @app.route('/api/link', methods=['GET'])
@@ -32,28 +33,10 @@ def get_link():
     song['soundcloud'] = get_soundcloud(search_term)
     SONG_DATA[song_id] = song
 
-    url = ngrok_url + '/song/' + song_id
-    return jsonify({'link': url, 'youtube': song['youtube'], 'apple': song['apple'], 'spotify': song['spotify'], 'image': song['image']})
-
-
-@app.route('/api/linkk', methods=['GET'])
-def get_linkk():
-    title = request.args['title']
-    artist = request.args['artist']
-
-    search_term = title + ' ' + artist
-
-    song_id = str(uuid.uuid1())[0: 8]
-    song = get_spotify(search_term)
-    song['name'] = title
-    song['artist'] = artist
-    song['youtube'] = get_youtube(search_term)
-    song['apple'] = get_apple(search_term)
-    song['soundcloud'] = get_soundcloud(search_term)
-    SONG_DATA[song_id] = song
-
-    url = ngrok_url + '/song/' + song_id
-    return url
+    url = URL + '/song/' + song_id
+    return jsonify({'link': url, 'youtube': song['youtube'],
+                    'apple': song['apple'], 'spotify': song['spotify'],
+                    'image': song['image']})
 
 
 @app.errorhandler(404)
@@ -124,5 +107,10 @@ def get_soundcloud(link):
     return res[0]['permalink_url']
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Launch the songstorm server")
+    parser.add_argument('-u', '--url', help='the URL the service is hosted on', required=True)
+    args = parser.parse_args()
+
+    URL = args.url
 
     app.run(debug=True)
